@@ -1,73 +1,54 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Project Overview
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This project is a backend service built using NestJS, designed to manage Over-The-Counter (OTC) market data for a cryptocurrency application. The service interacts with a MongoDB database to store and manipulate user points, which represent a form of digital currency within the OTC market. The project includes functionalities such as creating an OTC market, updating user points based on trading activities, and managing user profiles.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Key Features
 
-## Description
+- **OTC Market Creation**: Showcases how we initialize a new OTC market with predefined parameters including market name, chain ID, and URLs for fetching and displaying token symbols.
+- **User Points Management**: Allows for adding new users, updating existing user points based on trading activities, and retrieving user points.
+- **Scheduled Updates**: Implements a scheduled task to periodically update all users' points based on our Mystic API OTC points data, ensuring the system reflects the latest trading activities accurately.
+- **API Endpoints**: Exposes RESTful API endpoints for interacting with the OTC market data and user points.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Technical Stack
 
-## Installation
+- **Backend Framework**: NestJS, a progressive Node.js framework for building efficient, reliable, and scalable server-side applications.
+- **Database**: MongoDB, used for storing user points and other related data.
+- **HTTP Client**: Axios, for making HTTP requests to external APIs.
+- **Scheduling**: NestJS Schedule module, for executing tasks at specified intervals.
 
-```bash
-$ npm install
-```
+## Code Structure
 
-## Running the app
+### Service Layer (`app.service.ts`)
 
-```bash
-# development
-$ npm run start
+The service layer contains the business logic of the application. It defines methods for:
 
-# watch mode
-$ npm run start:dev
+- Creating an OTC market Sample.
+- Fetching user points.
+- Updating all users' points.
+- Updating individual user points based on new token data.
+- Adding new users with initial points.
 
-# production mode
-$ npm run start:prod
-```
+### Controller Layer (`app.controller.ts`)
 
-## Test
+The controller layer handles incoming HTTP requests and delegates them to the appropriate service methods. It exposes:
+
+- A GET endpoint for retrieving user points.
+- A scheduled task for daily updates on all users' points.
+
+## Getting Started
+
+To start working with this project, ensure you have Node.js installed on your machine. Then, clone the repository and navigate to the project directory. Install the dependencies by running:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm install
 ```
 
-## Support
+Before running the application, make sure to set up environment variables for `MYSTIC_API_URL`, `MYSTIC_ADMIN_KEY`, and `MYSTIC_CLIENT_KEY`. These are required for making authenticated requests to the external API.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Start the application by running:
 
-## Stay in touch
+```bash
+npm run start
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+The application will now be accessible, and you can interact with its endpoints through tools like Postman or directly via HTTP clients.
