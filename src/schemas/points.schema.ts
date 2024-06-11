@@ -15,7 +15,7 @@ export class TestPoint {
   @Prop({ type: String, default: PointStatus.active })
   status: PointStatus;
 
-  @Prop({ type: Date, default: Date.now })
+  @Prop({ type: Date })
   lastUpdatedExternalAt: Date;
 
   @Prop({ type: Date, default: Date.now })

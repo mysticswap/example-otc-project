@@ -43,13 +43,15 @@ export class AppService {
   }
 
   async getUsersPoints(user: string) {
-    const pointData = await this.pointsModel.findOne({ address: user });
+    const pointData = await this.pointsModel.findOne({
+      address: { $regex: user, $options: 'i' },
+    });
 
     if (!pointData) {
       return { points: 0, address: user };
     }
 
-    return pointData;
+    return { data: pointData };
   }
 
   async updateAllUsers() {
@@ -57,38 +59,41 @@ export class AppService {
     let chunk = length % 100; // 1 - n // divide into chunks to save memory
     let count = 0; //0 - n-1
 
-    while (count < chunk) {
+    while (count <= chunk) {
       const users = await this.pointsModel
         .find({})
         .skip(count * 100)
         .limit(100);
 
       for (let i = 0; i < users.length; i++) {
-        this.updateUser(users[i]);
+        await this.updateUser(users[i]);
       }
 
       count++;
     }
+
+    return { message: 'success' };
   }
 
   async updateUser(user: PointDocument) {
     const newData = await getNewTokenData(user.address);
-    const userData = newData.data.user[0];
+    const userData = newData.data.user;
 
-    let linearScale = 0;
-
-    // the points here is the source of truth, so if oldPoints from external doesn't match
-    if (user.points != userData.oldPoints) {
-      linearScale = user.points - userData.oldPoints;
+    if (!userData) {
+      return;
     }
 
+    // let linearScale = 0;
+
+    // // the points here is the source of truth, so if oldPoints from external doesn't match
+    // if (user.points != userData.oldPoints) {
+    //   linearScale = user.points - userData.oldPoints;
+    // }
+
     const points =
-      (userData.oldPoints + linearScale + userData.pointDifference) *
-      userData.multiplier; //multiplier is usually 1 but can be increases for bonus
+      (+user.points + +userData.pointsDifference) * +userData.multiplier; //multiplier is usually 1 but can be increases for bonus
 
     await this.updateUserPoint(user.address, points);
-
-    // return users;
   }
 
   async getNewTokenData(user: string) {
@@ -109,6 +114,26 @@ export class AppService {
       { points, lastUpdatedExternalAt: Date.now() },
       { new: true },
     );
+
+    return pointData;
+  }
+
+  async addUser(user: string) {
+    const randPoints = Math.random() * 100000;
+    let pointData = await this.pointsModel.findOne({ address: user });
+
+    if (pointData) {
+      await this.pointsModel.updateOne(
+        { address: user },
+        { points: +randPoints.toFixed(0) },
+        { new: true },
+      );
+    } else {
+      pointData = await this.pointsModel.create({
+        address: user,
+        points: +randPoints.toFixed(0),
+      });
+    }
 
     return pointData;
   }
