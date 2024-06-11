@@ -2,10 +2,10 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { PointStatus } from 'src/types/points';
 
-export type PointDocument = Point & Document;
+export type PointDocument = TestPoint & Document;
 
 @Schema()
-export class Point {
+export class TestPoint {
   @Prop()
   address: string;
 
@@ -25,4 +25,4 @@ export class Point {
   updatedAt: Date;
 }
 
-export const PointSchema = SchemaFactory.createForClass(Point);
+export const PointSchema = SchemaFactory.createForClass(TestPoint);

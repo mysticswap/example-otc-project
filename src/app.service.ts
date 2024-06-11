@@ -1,27 +1,53 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Point, PointDocument } from './schemas/points.schema';
+import { TestPoint, PointDocument } from './schemas/points.schema';
 import { getNewTokenData } from './requests';
+import axios from 'axios';
 
 @Injectable()
 export class AppService {
   constructor(
-    @InjectModel(Point.name) private pointsModel: Model<PointDocument>,
+    @InjectModel(TestPoint.name) private pointsModel: Model<PointDocument>,
   ) {}
+  // This function serves as a starting point and example for understanding how OTC market data might be organized. It does not perform actual market operations but provides a framework for future development. While we will handle the creation of the OTC market itself, the data you provide will be crucial for populating and utilizing this function effectively.
+  async createOTCMarket() {
+    try {
+      const url = `${process.env.MYSTIC_API_URL}/otc/create-market`;
+      console.log(url);
+
+      const request = await axios.post(
+        url,
+        {
+          name: 'Main Test OTC',
+          chainId: 81457,
+          pointsUrl: 'http://localhost:3001/otc-points', //this is very important as it is the url our backend queries to get the point, the format is "${base url + route}/{userAddress}"
+          domain: 'localhost',
+          tokenUrl:
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Ethereum-icon-purple.svg/768px-Ethereum-icon-purple.svg.png', // this is the url to the icon of the token synbol you want it to be, like showing the bch logo for your token on our market
+          multiplier: 1, //considered for increasing points traded on our platform, like users trading their points gets 15% bonus - use 1.15
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            authorization: `Bearer ${process.env.MYSTIC_ADMIN_KEY}`,
+          },
+        },
+      );
+
+      return request.data;
+    } catch (e) {
+      console.log(e);
+      return e;
+    }
+  }
 
   async getUsersPoints(user: string) {
     const pointData = await this.pointsModel.findOne({ address: user });
 
-    return pointData;
-  }
-
-  async updateUserPoint(user: string, points: number) {
-    const pointData = await this.pointsModel.findOneAndUpdate(
-      { address: user },
-      { points, lastUpdatedExternalAt: Date.now() },
-      { new: true },
-    );
+    if (!pointData) {
+      return { points: 0, address: user };
+    }
 
     return pointData;
   }
@@ -56,10 +82,34 @@ export class AppService {
       linearScale = user.points - userData.oldPoints;
     }
 
-    const points = userData.oldPoints + linearScale + userData.pointDifference;
+    const points =
+      (userData.oldPoints + linearScale + userData.pointDifference) *
+      userData.multiplier; //multiplier is usually 1 but can be increases for bonus
 
     await this.updateUserPoint(user.address, points);
 
     // return users;
+  }
+
+  async getNewTokenData(user: string) {
+    const url = `${process.env.MYSTIC_API_URL}/otc/points-traded?user=${user}`;
+    const request = await axios.get(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${process.env.MYSTIC_CLIENT_KEY}`,
+      },
+    });
+
+    return request.data;
+  }
+
+  async updateUserPoint(user: string, points: number) {
+    const pointData = await this.pointsModel.findOneAndUpdate(
+      { address: user },
+      { points, lastUpdatedExternalAt: Date.now() },
+      { new: true },
+    );
+
+    return pointData;
   }
 }
