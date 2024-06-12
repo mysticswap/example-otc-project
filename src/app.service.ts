@@ -10,7 +10,8 @@ export class AppService {
   constructor(
     @InjectModel(TestPoint.name) private pointsModel: Model<PointDocument>,
   ) {}
-  // This function serves as a starting point and example for understanding how OTC market data might be organized. It does not perform actual market operations but provides a framework for future development. While we will handle the creation of the OTC market itself, the data you provide will be crucial for populating and utilizing this function effectively.
+  // This function serves as a starting point and example for understanding how OTC market data would be created by the Mystic Team.
+  // While we will handle the creation of the OTC market itself, the data you provide should match the data below and will be crucial for populating and utilizing this function effectively.
   async createOTCMarket() {
     try {
       const url = `${process.env.MYSTIC_API_URL}/otc/create-market`;
@@ -20,6 +21,7 @@ export class AppService {
         url,
         {
           name: 'Main Test OTC',
+          ticker: 'OT',
           chainId: 81457,
           pointsUrl: 'http://localhost:3001/otc-points', //this is very important as it is the url our backend queries to get the point, the format is "${base url + route}/{userAddress}"
           domain: 'localhost',

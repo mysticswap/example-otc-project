@@ -1,6 +1,10 @@
 # Project Overview
 
-This project is a backend service built using NestJS, designed to manage Over-The-Counter (OTC) market data for a cryptocurrency application. The service interacts with a MongoDB database to store and manipulate user points, which represent a form of digital currency within the OTC market. The project includes functionalities such as creating an OTC market, updating user points based on trading activities, and managing user profiles.
+This project is a backend service built using NestJS, designed to manage Over-The-Counter (OTC) market data for a cryptocurrency application. The service interacts with a MongoDB database to store and manipulate user points, which represent a form of digital currency within the OTC market. The project includes functionalities such as simulating creation of an OTC market, updating user points based on trading activities, and managing user profiles.
+
+## How Our Code Works
+
+Our code is structured into two main components: the service layer (`app.service.ts`) and the controller layer (`app.controller.ts`). Both layers work together to handle aspects of the application's functionality.
 
 ## Key Features
 
@@ -8,6 +12,24 @@ This project is a backend service built using NestJS, designed to manage Over-Th
 - **User Points Management**: Allows for adding new users, updating existing user points based on trading activities, and retrieving user points.
 - **Scheduled Updates**: Implements a scheduled task to periodically update all users' points based on our Mystic API OTC points data, ensuring the system reflects the latest trading activities accurately.
 - **API Endpoints**: Exposes RESTful API endpoints for interacting with the OTC market data and user points.
+
+### Service Layer (`app.service.ts`)
+
+The service layer contains the core business logic of the application. Here's how you can view and copy the code:
+
+1. Open the project in Visual Studio Code.
+2. Navigate to the `src` folder.
+3. Open the `app.service.ts` file.
+4. Use the "Go to File..." feature in VSCode to locate the file.
+5. Right-click on the file and select "Copy Path".
+6. Press `Cmd+C` (or `Ctrl+C` on Windows/Linux) to copy the file path.
+7. Paste the copied path into an IDE.
+
+### Controller Layer (`app.controller.ts`)
+
+Similarly, to view and copy the controller layer code:
+
+1. Follow steps similar to those above but target the `app.controller.ts` file instead.
 
 ## Technical Stack
 
@@ -28,27 +50,31 @@ The service layer contains the business logic of the application. It defines met
 - Updating individual user points based on new token data.
 - Adding new users with initial points.
 
-### Controller Layer (`app.controller.ts`)
+### Services (`app.service.ts`)
 
-The controller layer handles incoming HTTP requests and delegates them to the appropriate service methods. It exposes:
+The service layer is responsible for handling the business logic of the application. It includes methods for:
 
-- A GET endpoint for retrieving user points.
-- A scheduled task for daily updates on all users' points.
+- **Fetching User Points**: Retrieves the points associated with a specific user address.
+- **Updating All Users' Points**: Periodically updates the points of all users based on trading activities.
+- **Updating Individual User Points**: Adjusts the points of a single user based on new token data received from the Mystic API.
+- **Adding New Users**: Creates new user profiles with initial points assigned randomly.
 
-## Getting Started
+Each method in the service layer interacts with the MongoDB database to persist data changes and retrieves data when needed.
 
-To start working with this project, ensure you have Node.js installed on your machine. Then, clone the repository and navigate to the project directory. Install the dependencies by running:
+### Controllers (`app.controller.ts`)
 
-```bash
-npm install
-```
+The controller layer acts as the intermediary between the client and the service layer. It handles incoming HTTP requests and delegates them to the appropriate service methods. The controller includes:
 
-Before running the application, make sure to set up environment variables for `MYSTIC_API_URL`, `MYSTIC_ADMIN_KEY`, and `MYSTIC_CLIENT_KEY`. These are required for making authenticated requests to the external API.
+- A GET endpoint (`@Get('/:userAddress')`) for retrieving user points based on a provided user address.
+- A scheduled task (`@Cron(CronExpression.EVERY_DAY_AT_1AM)`) that triggers the `updateAllUsers()` method daily to update all users' points.
 
-Start the application by running:
+## Simulating Integration with MysticSwap
 
-```bash
-npm run start
-```
+This project includes an example of integrating with a third-party app, specifically the Mystic API. To simulate this integration, follow these steps:
 
-The application will now be accessible, and you can interact with its endpoints through tools like Postman or directly via HTTP clients.
+1. Clone the repository and navigate to the project directory.
+2. Run `npm install` to install all necessary dependencies.
+3. Build the project by running `npm run build`.
+4. Start the application by running `npm run start`.
+
+Before proceeding, ensure you have the `MYSTIC_API_URL` and `MYSTIC_CLIENT_KEY` environment variables set up. These are required for authenticating requests to the Mystic API.
