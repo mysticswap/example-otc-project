@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { TestPoint, PointDocument } from './schemas/points.schema';
-import { getNewTokenData } from './requests';
 import axios from 'axios';
 
 @Injectable()
@@ -68,7 +67,7 @@ export class AppService {
         .limit(100);
 
       for (let i = 0; i < users.length; i++) {
-        await this.updateUser(users[i]);
+        await this.updateUser(users[i], Math.floor(Math.random() * 100000));
       }
 
       count++;
@@ -77,8 +76,8 @@ export class AppService {
     return { message: 'success' };
   }
 
-  async updateUser(user: PointDocument) {
-    const newData = await getNewTokenData(user.address);
+  async updateUser(user: PointDocument, pointsNumber: number) {
+    const newData = await this.getNewTokenData(user.address, pointsNumber);
     const userData = newData.data.user;
 
     if (!userData) {
@@ -98,8 +97,8 @@ export class AppService {
     await this.updateUserPoint(user.address, points);
   }
 
-  async getNewTokenData(user: string) {
-    const url = `${process.env.MYSTIC_API_URL}/otc/points-traded?user=${user}`;
+  async getNewTokenData(user: string, points?: number) {
+    const url = `${process.env.MYSTIC_API_URL}/otc/points-traded?user=${user}&points=`;
     const request = await axios.get(url, {
       headers: {
         'Content-Type': 'application/json',
