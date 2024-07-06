@@ -98,7 +98,7 @@ export class AppService {
   }
 
   async getNewTokenData(user: string, points?: number) {
-    const url = `${process.env.MYSTIC_API_URL}/otc/points-traded?user=${user}&points=`;
+    const url = `${process.env.MYSTIC_API_URL}/otc/points-traded?user=${user}&points=${points}`;
     const request = await axios.get(url, {
       headers: {
         'Content-Type': 'application/json',
