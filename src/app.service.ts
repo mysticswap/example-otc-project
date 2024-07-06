@@ -57,7 +57,7 @@ export class AppService {
 
   async updateAllUsers() {
     const length = await this.pointsModel.countDocuments();
-    let chunk = length % 100; // 1 - n // divide into chunks to save memory
+    let chunk = Math.floor(length / 100); // 1 - n // divide into chunks to save memory
     let count = 0; //0 - n-1
 
     while (count <= chunk) {
