@@ -92,7 +92,7 @@ export class AppService {
     // }
 
     const points =
-      (+user.points + +userData.pointsDifference) * +userData.multiplier; //multiplier is usually 1 but can be increases for bonus
+      +user.points + +userData.pointsDifference * +userData.multiplier; //multiplier is usually 1 but can be increases for bonus
 
     await this.updateUserPoint(user.address, points);
   }
