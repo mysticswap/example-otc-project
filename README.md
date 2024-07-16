@@ -2,6 +2,11 @@
 
 This project simulates the codebase of a protocol integrating with Mysticswap, so their points can be traded there. As such, the codebase included both a) the simulated project's codebase and b) the integration code itself. To simulate a partner, we chose to recreate a backend service built using NestJS, designed to manage Over-The-Counter (OTC) market data for a cryptocurrency application. The service interacts with a MongoDB database to store and manipulate user points, which represent a form of digital currency within the OTC market. The project includes functionalities such as simulating creation of an OTC market, updating user points based on trading activities, and managing user profiles, all standard practices in today's web3 ecosystem.
 
+## ContractAddress (test project) (Ask the team for test partner key)
+
+- Blast(1): 0x8d92f6bf90bbc18ff731f0ab8a039e5ec1f0ce62
+- Blast(2): 0x7243415B1B5C2e0B4922e1555A225890be58f63e
+
 ## Key Integration Features
 
 - **OTC Market Creation**: Showcases how we initialize a new OTC market with predefined parameters including market name, chain ID, and URLs for fetching and displaying token symbols.

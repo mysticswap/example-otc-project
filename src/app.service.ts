@@ -22,7 +22,7 @@ export class AppService {
           name: 'Main Test OTC',
           ticker: 'OT',
           chainId: 81457,
-          pointsUrl: 'http://localhost:3001/otc-points', //this is very important as it is the url our backend queries to get the point, the format is "${base url + route}/{userAddress}"
+          pointsUrl: 'http://localhost:3001/otc-points',
           domain: 'localhost',
           tokenUrl:
             'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Ethereum-icon-purple.svg/768px-Ethereum-icon-purple.svg.png', // this is the url to the icon of the token synbol you want it to be, like showing the bch logo for your token on our market
@@ -84,15 +84,7 @@ export class AppService {
       return;
     }
 
-    // let linearScale = 0;
-
-    // // the points here is the source of truth, so if oldPoints from external doesn't match
-    // if (user.points != userData.oldPoints) {
-    //   linearScale = user.points - userData.oldPoints;
-    // }
-
-    const points =
-      +user.points + +userData.pointsDifference * +userData.multiplier; //multiplier is usually 1 but can be increases for bonus
+    const points = +user.points + +userData.pointsDifference;
 
     await this.updateUserPoint(user.address, points);
   }

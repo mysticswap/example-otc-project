@@ -17,14 +17,4 @@ export class AppController {
   getUsersPoints(@Param('userAddress') userAddress: string) {
     return this.appService.getUsersPoints(userAddress);
   }
-
-  // @Post('create-market')
-  // createTokenMarket() {
-  //   return this.appService.createOTCMarket();
-  // }
-
-  // @Post('add-user')
-  // addNewUSer(@Body('user') user: string) {
-  //   return this.appService.addUser(user);
-  // }
 }
